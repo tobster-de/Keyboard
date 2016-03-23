@@ -45,8 +45,8 @@
 			this.keyChoices.Name = "keyChoices";
 			this.keyChoices.Size = new System.Drawing.Size(207, 21);
 			this.keyChoices.TabIndex = 0;
-			this.keyChoices.SelectedIndexChanged += new System.EventHandler(this.keyChoices_SelectedIndexChanged);
-			this.keyChoices.KeyDown += new System.Windows.Forms.KeyEventHandler(this.keyChoices_KeyDown);
+			this.keyChoices.SelectedIndexChanged += new System.EventHandler(this.KeyChoicesSelectedIndexChanged);
+			this.keyChoices.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyChoicesKeyDown);
 			// 
 			// altChkBox
 			// 
@@ -57,8 +57,8 @@
 			this.altChkBox.TabIndex = 2;
 			this.altChkBox.Text = "Alt";
 			this.altChkBox.UseVisualStyleBackColor = true;
-			this.altChkBox.CheckedChanged += new System.EventHandler(this.altChkBox_CheckedChanged);
-			this.altChkBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.keyChoices_KeyDown);
+			this.altChkBox.CheckedChanged += new System.EventHandler(this.AltChkBoxCheckedChanged);
+			this.altChkBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyChoicesKeyDown);
 			// 
 			// shiftChkBox
 			// 
@@ -69,8 +69,8 @@
 			this.shiftChkBox.TabIndex = 3;
 			this.shiftChkBox.Text = "Shift";
 			this.shiftChkBox.UseVisualStyleBackColor = true;
-			this.shiftChkBox.CheckedChanged += new System.EventHandler(this.shiftChkBox_CheckedChanged);
-			this.shiftChkBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.keyChoices_KeyDown);
+			this.shiftChkBox.CheckedChanged += new System.EventHandler(this.ShiftChkBoxCheckedChanged);
+			this.shiftChkBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyChoicesKeyDown);
 			// 
 			// ctrlChkBox
 			// 
@@ -81,8 +81,8 @@
 			this.ctrlChkBox.TabIndex = 4;
 			this.ctrlChkBox.Text = "Ctrl";
 			this.ctrlChkBox.UseVisualStyleBackColor = true;
-			this.ctrlChkBox.CheckedChanged += new System.EventHandler(this.ctrlChkBox_CheckedChanged);
-			this.ctrlChkBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.keyChoices_KeyDown);
+			this.ctrlChkBox.CheckedChanged += new System.EventHandler(this.CtrlChkBoxCheckedChanged);
+			this.ctrlChkBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyChoicesKeyDown);
 			// 
 			// acceptBtn
 			// 
@@ -92,7 +92,7 @@
 			this.acceptBtn.TabIndex = 5;
 			this.acceptBtn.Text = "Accept";
 			this.acceptBtn.UseVisualStyleBackColor = true;
-			this.acceptBtn.Click += new System.EventHandler(this.acceptBtn_Click);
+			this.acceptBtn.Click += new System.EventHandler(this.AcceptBtnClick);
 			// 
 			// cancelBtn
 			// 
@@ -103,7 +103,7 @@
 			this.cancelBtn.TabIndex = 6;
 			this.cancelBtn.Text = "Cancel";
 			this.cancelBtn.UseVisualStyleBackColor = true;
-			this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+			this.cancelBtn.Click += new System.EventHandler(this.CancelBtnClick);
 			// 
 			// shiftKeys
 			// 
@@ -113,8 +113,8 @@
 			this.shiftKeys.Name = "shiftKeys";
 			this.shiftKeys.Size = new System.Drawing.Size(64, 21);
 			this.shiftKeys.TabIndex = 7;
-			this.shiftKeys.SelectedIndexChanged += new System.EventHandler(this.shiftKeys_SelectedIndexChanged);
-			this.shiftKeys.KeyDown += new System.Windows.Forms.KeyEventHandler(this.shiftKeys_KeyDown);
+			this.shiftKeys.SelectedIndexChanged += new System.EventHandler(this.ShiftKeysSelectedIndexChanged);
+			this.shiftKeys.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ShiftKeysKeyDown);
 			// 
 			// SetKey
 			// 

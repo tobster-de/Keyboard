@@ -29,7 +29,7 @@ namespace Keyboard
 		/// <summary>Default constructor, used in property grid.</summary>
 		public SetKey()
 		{
-			InitializeComponent();
+		    this.InitializeComponent();
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.ControlBox = false;
@@ -38,7 +38,7 @@ namespace Keyboard
 			this.acceptBtn.Visible = false;
 			this.cancelBtn.Visible = false;
 			this.FormBorderStyle = FormBorderStyle.None;
-			key = new Key();
+		    this.key = new Key();
 			foreach (Messaging.VKeys vk in Enum.GetValues(typeof(Messaging.VKeys)))
 			{
 				this.keyChoices.Items.Add(vk);
@@ -53,7 +53,7 @@ namespace Keyboard
 		/// <param name="key">The key to be editted.</param>
 		public SetKey(Key key)
 		{
-			InitializeComponent();
+		    this.InitializeComponent();
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.ControlBox = false;
@@ -65,19 +65,19 @@ namespace Keyboard
 			this.FormBorderStyle = FormBorderStyle.None;
 			this.key = key;
 
-			foreach (Messaging.VKeys tempVK in Enum.GetValues(typeof(Messaging.VKeys)))
+			foreach (Messaging.VKeys tempVk in Enum.GetValues(typeof(Messaging.VKeys)))
 			{
-				this.keyChoices.Items.Add(tempVK);
+				this.keyChoices.Items.Add(tempVk);
 			}
 			for (int i = 0x30; i < 0x40; i++)
 			{
 				this.shiftKeys.Items.Add((Messaging.VKeys)i);
 			}
-			if ((this.key.ShiftType & Messaging.ShiftType.ALT) == Messaging.ShiftType.ALT)
+			if ((this.key.ShiftType & Messaging.ShiftType.Alt) == Messaging.ShiftType.Alt)
 				this.altChkBox.Checked = true;
-			if ((this.key.ShiftType & Messaging.ShiftType.CTRL) == Messaging.ShiftType.CTRL)
+			if ((this.key.ShiftType & Messaging.ShiftType.Ctrl) == Messaging.ShiftType.Ctrl)
 				this.ctrlChkBox.Checked = true;
-			if ((this.key.ShiftType & Messaging.ShiftType.SHIFT) == Messaging.ShiftType.SHIFT)
+			if ((this.key.ShiftType & Messaging.ShiftType.Shift) == Messaging.ShiftType.Shift)
 				this.shiftChkBox.Checked = true;
 			this.keyChoices.SelectedItem = key.Vk;
 			this.shiftKeys.SelectedItem = key.ShiftKey;
@@ -88,22 +88,22 @@ namespace Keyboard
 		/// <param name="key">The key to be editted.</param>
 		public SetKey(Point p, Key key)
 		{
-			InitializeComponent();
+		    this.InitializeComponent();
 			this.key = key;
 			this.TopMost = true;
-			foreach (Messaging.VKeys tempVK in Enum.GetValues(typeof(Messaging.VKeys)))
+			foreach (Messaging.VKeys tempVk in Enum.GetValues(typeof(Messaging.VKeys)))
 			{
-				this.keyChoices.Items.Add(tempVK);
+				this.keyChoices.Items.Add(tempVk);
 			}
 			for (int i = 0x30; i < 0x3A; i++)
 			{
 				this.shiftKeys.Items.Add((Messaging.VKeys)i);
 			}
-			if ((this.key.ShiftType & Messaging.ShiftType.ALT) == Messaging.ShiftType.ALT)
+			if ((this.key.ShiftType & Messaging.ShiftType.Alt) == Messaging.ShiftType.Alt)
 				this.altChkBox.Checked = true;
-			if ((this.key.ShiftType & Messaging.ShiftType.CTRL) == Messaging.ShiftType.CTRL)
+			if ((this.key.ShiftType & Messaging.ShiftType.Ctrl) == Messaging.ShiftType.Ctrl)
 				this.ctrlChkBox.Checked = true;
-			if ((this.key.ShiftType & Messaging.ShiftType.SHIFT) == Messaging.ShiftType.SHIFT)
+			if ((this.key.ShiftType & Messaging.ShiftType.Shift) == Messaging.ShiftType.Shift)
 				this.shiftChkBox.Checked = true;
 			this.keyChoices.SelectedItem = this.key.Vk;
 			this.shiftKeys.SelectedItem = key.ShiftKey;
@@ -115,7 +115,7 @@ namespace Keyboard
 		/// <summary>The event for handling the accept button press.</summary>
 		/// <param name="sender">The accept button.</param>
 		/// <param name="e">The button click event.</param>
-		private void acceptBtn_Click(object sender, EventArgs e)
+		private void AcceptBtnClick(object sender, EventArgs e)
 		{
 			this.DialogResult = DialogResult.OK;
 			this.Close();
@@ -124,7 +124,7 @@ namespace Keyboard
 		/// <summary>Event to handle the key change.</summary>
 		/// <param name="sender">The dropdown box.</param>
 		/// <param name="e">The selected index change mouse event.</param>
-		private void keyChoices_SelectedIndexChanged(object sender, EventArgs e)
+		private void KeyChoicesSelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.key.Vk = (Messaging.VKeys)this.keyChoices.SelectedItem;
 		}
@@ -132,7 +132,7 @@ namespace Keyboard
 		/// <summary>Event to handle the shift keys index change.</summary>
 		/// <param name="sender">The dropdown box.</param>
 		/// <param name="e">The click event.</param>
-		private void shiftKeys_SelectedIndexChanged(object sender, EventArgs e)
+		private void ShiftKeysSelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.key.ShiftKey = (Messaging.VKeys)this.shiftKeys.SelectedItem;
 		}
@@ -140,32 +140,32 @@ namespace Keyboard
 		/// <summary>Event to handle the alt checkbox being enabled/disabled.</summary>
 		/// <param name="sender">The alt checkbox</param>
 		/// <param name="e">The event.</param>
-		private void altChkBox_CheckedChanged(object sender, EventArgs e)
+		private void AltChkBoxCheckedChanged(object sender, EventArgs e)
 		{
 			if (this.altChkBox.Checked)
 			{
-				this.key.ShiftType |= Messaging.ShiftType.ALT;
+				this.key.ShiftType |= Messaging.ShiftType.Alt;
 			}
 			else
 			{
-				this.key.ShiftType ^= Messaging.ShiftType.ALT;
+				this.key.ShiftType ^= Messaging.ShiftType.Alt;
 			}
 		}
 
 		/// <summary>Event to handle the shift checkbox being enabled/disabled.</summary>
 		/// <param name="sender">The shift checkbox</param>
 		/// <param name="e">The event.</param>
-		private void shiftChkBox_CheckedChanged(object sender, EventArgs e)
+		private void ShiftChkBoxCheckedChanged(object sender, EventArgs e)
 		{
 			if (this.shiftChkBox.Checked)
 			{
-				this.key.ShiftType |= Messaging.ShiftType.SHIFT;
+				this.key.ShiftType |= Messaging.ShiftType.Shift;
 				this.shiftKeys.Enabled = true;
 			}
 			else
 			{
-				this.key.ShiftType ^= Messaging.ShiftType.SHIFT;
-				this.key.ShiftKey = Messaging.VKeys.NULL;
+				this.key.ShiftType ^= Messaging.ShiftType.Shift;
+				this.key.ShiftKey = Messaging.VKeys.Null;
 				this.shiftKeys.Enabled = false;
 			}
 		}
@@ -173,22 +173,22 @@ namespace Keyboard
 		/// <summary>Event to handle the ctrl checkbox being enabled/disabled.</summary>
 		/// <param name="sender">The ctrl checkbox</param>
 		/// <param name="e">The event.</param>
-		private void ctrlChkBox_CheckedChanged(object sender, EventArgs e)
+		private void CtrlChkBoxCheckedChanged(object sender, EventArgs e)
 		{
 			if (this.ctrlChkBox.Checked)
 			{
-				this.key.ShiftType |= Messaging.ShiftType.CTRL;
+				this.key.ShiftType |= Messaging.ShiftType.Ctrl;
 			}
 			else
 			{
-				this.key.ShiftType ^= Messaging.ShiftType.CTRL;
+				this.key.ShiftType ^= Messaging.ShiftType.Ctrl;
 			}
 		}
 
 		/// <summary>Event to handle the cancel button</summary>
 		/// <param name="sender">The cancel button sending the event.</param>
 		/// <param name="e">The event arguments.</param>
-		private void cancelBtn_Click(object sender, EventArgs e)
+		private void CancelBtnClick(object sender, EventArgs e)
 		{
 			this.DialogResult = DialogResult.Abort;
 			this.Close();
@@ -197,17 +197,17 @@ namespace Keyboard
 		/// <summary>Event to handle key presses inside key choices.</summary>
 		/// <param name="sender">The drop down list, combo box of key choices.</param>
 		/// <param name="e">The event arguments.</param>
-		private void keyChoices_KeyDown(object sender, KeyEventArgs e)
+		private void KeyChoicesKeyDown(object sender, KeyEventArgs e)
 		{
-			HandleKey(sender, e);
+		    this.HandleKey(sender, e);
 		}
 
 		/// <summary>Event to handle key presses inside the shift key combo box.</summary>
 		/// <param name="sender">The shift key combo box.</param>
 		/// <param name="e">The event arguments</param>
-		private void shiftKeys_KeyDown(object sender, KeyEventArgs e)
+		private void ShiftKeysKeyDown(object sender, KeyEventArgs e)
 		{
-			HandleKey(sender, e);
+		    this.HandleKey(sender, e);
 		}
 		#endregion Events
 
@@ -221,39 +221,39 @@ namespace Keyboard
 			{
 				e.Handled = true;
 				e.SuppressKeyPress = true;
-				if (altChkBox.Checked)
+				if (this.altChkBox.Checked)
 				{
-					altChkBox.Checked = false;
+				    this.altChkBox.Checked = false;
 				}
 				else
 				{
-					altChkBox.Checked = true;
+				    this.altChkBox.Checked = true;
 				}
 			}
 			else if (e.Control)
 			{
 				e.Handled = true;
 				e.SuppressKeyPress = true;
-				if (ctrlChkBox.Checked)
+				if (this.ctrlChkBox.Checked)
 				{
-					ctrlChkBox.Checked = false;
+				    this.ctrlChkBox.Checked = false;
 				}
 				else
 				{
-					ctrlChkBox.Checked = true;
+				    this.ctrlChkBox.Checked = true;
 				}
 			}
 			else if (e.Shift)
 			{
 				e.Handled = true;
 				e.SuppressKeyPress = true;
-				if (shiftChkBox.Checked)
+				if (this.shiftChkBox.Checked)
 				{
-					shiftChkBox.Checked = false;
+				    this.shiftChkBox.Checked = false;
 				}
 				else
 				{
-					shiftChkBox.Checked = true;
+				    this.shiftChkBox.Checked = true;
 				}
 			}
 			if (e.KeyValue != 0)
@@ -261,13 +261,13 @@ namespace Keyboard
 				e.Handled = true;
 				e.SuppressKeyPress = true;
 				ComboBox lb = sender as ComboBox;
-				if (lb.Name == shiftKeys.Name)
+				if (lb.Name == this.shiftKeys.Name)
 				{
-					shiftKeys.SelectedItem = (Messaging.VKeys)e.KeyValue;
+				    this.shiftKeys.SelectedItem = (Messaging.VKeys)e.KeyValue;
 				}
-				else if (lb.Name == keyChoices.Name)
+				else if (lb.Name == this.keyChoices.Name)
 				{
-					keyChoices.SelectedItem = (Messaging.VKeys)e.KeyValue;
+				    this.keyChoices.SelectedItem = (Messaging.VKeys)e.KeyValue;
 				}
 			}
 		}
