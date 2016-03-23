@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing.Design;
+using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 
 namespace Keyboard
@@ -9,8 +10,19 @@ namespace Keyboard
 	[Serializable]
 	public class Key : UITypeEditor
 	{
-		/// <summary>The shift key's virtual key code.</summary>
-		public Messaging.VKeys ShiftKey { get; set; }
+        [StructLayout(LayoutKind.Explicit)]
+        struct Helper
+        {
+            [FieldOffset(0)]
+            public short Value;
+            [FieldOffset(0)]
+            public byte Low;
+            [FieldOffset(1)]
+            public byte High;
+        }
+
+        /// <summary>The shift key's virtual key code.</summary>
+        public Messaging.VKeys ShiftKey { get; set; }
 
 		/// <summary>The shift type (alt, ctrl, shift).</summary>
 		public Messaging.ShiftType ShiftType { get; set; }
@@ -22,33 +34,36 @@ namespace Keyboard
 		///     An internal counter used to count the number of attempts a button has tried to be pressed to exit after 4
 		///     attempts.
 		/// </summary>
-		private int _buttonCounter;
+		private int buttonCounter;
 
 		/// <summary>Default constructor</summary>
-		public Key(Messaging.VKeys vk = Messaging.VKeys.NULL, Messaging.VKeys shiftKey = Messaging.VKeys.NULL, Messaging.ShiftType shiftType = Messaging.ShiftType.NONE)
+		public Key(Messaging.VKeys vk = Messaging.VKeys.Null, Messaging.VKeys shiftKey = Messaging.VKeys.Null, Messaging.ShiftType shiftType = Messaging.ShiftType.None)
 		{
-			_buttonCounter = 0;
-			Vk = vk;
-			ShiftKey = shiftKey;
-			ShiftType = shiftType;
+		    this.buttonCounter = 0;
+		    this.Vk = vk;
+		    this.ShiftKey = shiftKey;
+		    this.ShiftType = shiftType;
 		}
 
 		public Key(char c)
 		{
-			_buttonCounter = 0;
-			Vk = (Messaging.VKeys)Messaging.GetVirtualKeyCode(c);
-			ShiftKey = Messaging.VKeys.NULL;
-			ShiftType = Messaging.ShiftType.NONE;
+		    this.buttonCounter = 0;
+
+            var helper = new Helper { Value = Messaging.VkKeyScan(c) };
+
+		    this.Vk = (Messaging.VKeys)helper.Low;
+		    this.ShiftKey = Messaging.VKeys.Null;
+		    this.ShiftType = (Messaging.ShiftType)helper.High;
 		}
 
 		/// <summary>Constructor if you already have a whole key.  Good for making a dereferenced copy.</summary>
 		/// <param name="key">The already built key.</param>
 		public Key(Key key)
 		{
-			_buttonCounter = 0;
-			Vk = key.Vk;
-			ShiftKey = key.ShiftKey;
-			ShiftType = key.ShiftType;
+		    this.buttonCounter = 0;
+		    this.Vk = key.Vk;
+		    this.ShiftKey = key.ShiftKey;
+		    this.ShiftType = key.ShiftType;
 		}
 
 		/// <summary>Emulates a keyboard key press.</summary>
@@ -58,40 +73,40 @@ namespace Keyboard
 		public bool Press(IntPtr hWnd, bool foreground)
 		{
 			if (foreground)
-				return PressForeground(hWnd);
+				return this.PressForeground(hWnd);
 
-			return PressBackground(hWnd);
+			return this.PressBackground(hWnd);
 		}
 
 		public bool Down(IntPtr hWnd, bool foreground)
 		{
-			switch (ShiftType)
+			switch (this.ShiftType)
 			{
-				case Messaging.ShiftType.NONE:
+				case Messaging.ShiftType.None:
 					if (foreground)
 					{
 						if (!Messaging.ForegroundKeyDown(hWnd, this))
 						{
-							_buttonCounter++;
-							if (_buttonCounter == 2)
+						    this.buttonCounter++;
+							if (this.buttonCounter == 2)
 							{
-								_buttonCounter = 0;
+							    this.buttonCounter = 0;
 								return false;
 							}
-							Down(hWnd, true);
+						    this.Down(hWnd, true);
 						}
 					}
 					else
 					{
 						if (!Messaging.SendMessageDown(hWnd, this, true))
 						{
-							_buttonCounter++;
-							if (_buttonCounter == 2)
+						    this.buttonCounter++;
+							if (this.buttonCounter == 2)
 							{
-								_buttonCounter = 0;
+							    this.buttonCounter = 0;
 								return false;
 							}
-							Down(hWnd, false);
+						    this.Down(hWnd, false);
 						}
 					}
 					return true;
@@ -101,33 +116,33 @@ namespace Keyboard
 
 		public bool Up(IntPtr hWnd, bool foreground)
 		{
-			switch (ShiftType)
+			switch (this.ShiftType)
 			{
-				case Messaging.ShiftType.NONE:
+				case Messaging.ShiftType.None:
 					if (foreground)
 					{
 						if (!Messaging.ForegroundKeyUp(hWnd, this))
 						{
-							_buttonCounter++;
-							if (_buttonCounter == 2)
+						    this.buttonCounter++;
+							if (this.buttonCounter == 2)
 							{
-								_buttonCounter = 0;
+							    this.buttonCounter = 0;
 								return false;
 							}
-							Up(hWnd, foreground);
+						    this.Up(hWnd, foreground);
 						}
 					}
 					else
 					{
 						if (!Messaging.SendMessageUp(hWnd, this, true))
 						{
-							_buttonCounter++;
-							if (_buttonCounter == 2)
+						    this.buttonCounter++;
+							if (this.buttonCounter == 2)
 							{
-								_buttonCounter = 0;
+							    this.buttonCounter = 0;
 								return false;
 							}
-							Up(hWnd, foreground);
+						    this.Up(hWnd, foreground);
 						}
 					}
 					return true;
@@ -137,18 +152,18 @@ namespace Keyboard
 
 		public bool PressForeground()
 		{
-			switch (ShiftType)
+			switch (this.ShiftType)
 			{
-				case Messaging.ShiftType.NONE:
+				case Messaging.ShiftType.None:
 					if (!Messaging.ForegroundKeyPress(this))
 					{
-						_buttonCounter++;
-						if (_buttonCounter == 2)
+					    this.buttonCounter++;
+						if (this.buttonCounter == 2)
 						{
-							_buttonCounter = 0;
+						    this.buttonCounter = 0;
 							return false;
 						}
-						PressForeground();
+					    this.PressForeground();
 					}
 					return true;
 			}
@@ -161,39 +176,39 @@ namespace Keyboard
 		public bool PressBackground(IntPtr hWnd)
 		{
 			bool alt = false, ctrl = false, shift = false;
-			switch (ShiftType)
+			switch (this.ShiftType)
 			{
-				case Messaging.ShiftType.ALT:
+				case Messaging.ShiftType.Alt:
 					alt = true;
 					break;
-				case Messaging.ShiftType.CTRL:
+				case Messaging.ShiftType.Ctrl:
 					ctrl = true;
 					break;
-				case Messaging.ShiftType.NONE:
+				case Messaging.ShiftType.None:
 					if (!Messaging.SendMessage(hWnd, this, true))
 					{
-						_buttonCounter++;
-						if (_buttonCounter == 2)
+					    this.buttonCounter++;
+						if (this.buttonCounter == 2)
 						{
-							_buttonCounter = 0;
+						    this.buttonCounter = 0;
 							return false;
 						}
-						PressBackground(hWnd);
+					    this.PressBackground(hWnd);
 					}
 					return true;
-				case Messaging.ShiftType.SHIFT:
+				case Messaging.ShiftType.Shift:
 					shift = true;
 					break;
 			}
 			if (!Messaging.SendMessageAll(hWnd, this, alt, ctrl, shift))
 			{
-				_buttonCounter++;
-				if (_buttonCounter == 2)
+			    this.buttonCounter++;
+				if (this.buttonCounter == 2)
 				{
-					_buttonCounter = 0;
+				    this.buttonCounter = 0;
 					return false;
 				}
-				PressBackground(hWnd);
+			    this.PressBackground(hWnd);
 			}
 			return true;
 		}
@@ -204,39 +219,39 @@ namespace Keyboard
 		public bool PressForeground(IntPtr hWnd)
 		{
 			bool alt = false, ctrl = false, shift = false;
-			switch (ShiftType)
+			switch (this.ShiftType)
 			{
-				case Messaging.ShiftType.ALT:
+				case Messaging.ShiftType.Alt:
 					alt = true;
 					break;
-				case Messaging.ShiftType.CTRL:
+				case Messaging.ShiftType.Ctrl:
 					ctrl = true;
 					break;
-				case Messaging.ShiftType.NONE:
+				case Messaging.ShiftType.None:
 					if (!Messaging.ForegroundKeyPress(hWnd, this))
 					{
-						_buttonCounter++;
-						if (_buttonCounter == 2)
+					    this.buttonCounter++;
+						if (this.buttonCounter == 2)
 						{
-							_buttonCounter = 0;
+						    this.buttonCounter = 0;
 							return false;
 						}
-						PressForeground(hWnd);
+					    this.PressForeground(hWnd);
 					}
 					return true;
-				case Messaging.ShiftType.SHIFT:
+				case Messaging.ShiftType.Shift:
 					shift = true;
 					break;
 			}
 			if (!Messaging.ForegroundKeyPressAll(hWnd, this, alt, ctrl, shift))
 			{
-				_buttonCounter++;
-				if (_buttonCounter == 2)
+			    this.buttonCounter++;
+				if (this.buttonCounter == 2)
 				{
-					_buttonCounter = 0;
+				    this.buttonCounter = 0;
 					return false;
 				}
-				PressForeground(hWnd);
+			    this.PressForeground(hWnd);
 			}
 			return true;
 		}
@@ -273,7 +288,7 @@ namespace Keyboard
 		/// <returns>Returns the proper string.</returns>
 		public override string ToString()
 		{
-			return string.Format("{0} {1}", ShiftType, Vk);
+			return string.Format("{0} {1}", this.ShiftType, this.Vk);
 		}
 	}
 }
