@@ -30,11 +30,11 @@ namespace KeyboardDemo
 				List<Key> keys = "111*11=".Select(c => new Key(c)).ToList();
 				//var procId = p.Id;
 				//Console.WriteLine("ID: " + procId);
-				Console.WriteLine("Sending background keypresses to write \"hello world\"");
 				//p.WaitForInputIdle();
+
 				foreach (var key in keys)
 				{
-				    key.PressForeground(handle); //p.MainWindowHandle);
+				    key.PressBackground(handle); //p.MainWindowHandle);
 				}
 
 			}
